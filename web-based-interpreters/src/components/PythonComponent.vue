@@ -39,7 +39,7 @@ export default {
 
   data() {
     return {
-      source: localStorage.getItem('sourcePython')
+      source: localStorage.getItem("sourcePython")
     };
   },
 
@@ -48,7 +48,6 @@ export default {
       var mypre = document.getElementById("output");
       mypre.innerHTML = mypre.innerHTML + text;
     },
-
     builtinRead(x) {
       if (
         Sk.builtinFiles === undefined ||
@@ -58,18 +57,18 @@ export default {
       return Sk.builtinFiles["files"][x];
     },
 
+    // Here's everything you need to run a python program in skulpt
+    // grab the code from your textarea
+    // get a reference to your pre element for output
+    // configure the output function
+    // call Sk.importMainWithBody()
     runit() {
       var prog = document.getElementById("yourcode").value;
       var mypre = document.getElementById("output");
-      var errorMessage = "";
-
       mypre.innerHTML = "";
       Sk.pre = "output";
-      Sk.configure({
-        output: this.outf,
-        read: this.builtinRead
-      });
-
+      Sk.configure({ output: this.outf, read: this.builtinRead });
+      (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = "mycanvas";
       var myPromise = Sk.misceval.asyncToPromise(function() {
         return Sk.importMainWithBody("<stdin>", false, prog, true);
       });
@@ -81,8 +80,7 @@ export default {
           console.log(err.toString());
         }
       );
-
-      localStorage.setItem("sourcePython", this.source);
+      localStorage.setItem('sourcePython', this.source);
     }
   }
 };
