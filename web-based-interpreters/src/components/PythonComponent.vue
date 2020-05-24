@@ -39,7 +39,7 @@ export default {
 
   data() {
     return {
-      source: localStorage.getItem("sourcePython")
+      source: localStorage.getItem("sourcePython") ? localStorage.getItem("sourcePython"): "print('Hello World!')",
     };
   },
 

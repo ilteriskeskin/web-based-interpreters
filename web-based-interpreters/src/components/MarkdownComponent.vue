@@ -33,7 +33,7 @@ export default {
   name: "MarkdownComponent",
   data() {
     return {
-      source: localStorage.getItem("sourceMarkdown")
+      source: localStorage.getItem("sourceMarkdown") ? localStorage.getItem("sourceMarkdown"): "# Hello World!",
     };
   },
 
