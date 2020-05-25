@@ -2,6 +2,15 @@
   <div id="app" class="main">
     <div class="container">
       <h1 class="mainTitle">Python Editor</h1>
+      <p>Yazdığınız kodların çıktısını görmek için lütfen Web Konsolu açın.</p>
+      <ul>
+        <li>Mozilla Firefox için: Ctrl+Shift+K</li>
+        <li>Google Chrome için: Ctrl+Shift+i</li>
+      </ul>
+      <p>
+        <code>Dikkat:</code> Python bildiğiniz gibi girintiye duyarlı bir dil. Aşağıda kodlarınızı yazdığınız kutucuğa da girintiye
+        dikkat ederek yazmanız gerekmektedir.
+      </p>
 
       <hr />
 
@@ -13,22 +22,7 @@
           <br />
           <button class="btn btn-warning" @click="runit">Çalıştır</button>
         </div>
-        <div class="col">
-          <h5>Önizleme</h5>
-          <hr />
-          <pre id="output"></pre>
-        </div>
       </div>
-
-      <!-- <iframe
-        src="https://trinket.io/embed/python/34362c5a5c"
-        width="100%"
-        height="356"
-        frameborder="0"
-        marginwidth="0"
-        marginheight="0"
-        allowfullscreen
-      ></iframe>-->
     </div>
   </div>
 </template>
@@ -39,48 +33,30 @@ export default {
 
   data() {
     return {
-      source: localStorage.getItem("sourcePython") ? localStorage.getItem("sourcePython"): "print('Hello World!')",
+      source: localStorage.getItem("sourcePython")
+        ? localStorage.getItem("sourcePython")
+        : "print('Hello World!')",
+      output: ""
     };
   },
 
-  methods: {
-    outf(text) {
-      var mypre = document.getElementById("output");
-      mypre.innerHTML = mypre.innerHTML + text;
-    },
-    builtinRead(x) {
-      if (
-        Sk.builtinFiles === undefined ||
-        Sk.builtinFiles["files"][x] === undefined
-      )
-        throw "File not found: '" + x + "'";
-      return Sk.builtinFiles["files"][x];
-    },
+  created() {
+    console.log(
+      "***************************************************************************"
+    );
+    console.log("Welcome Python Editor");
+    console.log(
+      "***************************************************************************"
+    );
+  },
 
-    // Here's everything you need to run a python program in skulpt
-    // grab the code from your textarea
-    // get a reference to your pre element for output
-    // configure the output function
-    // call Sk.importMainWithBody()
+  methods: {
     runit() {
-      var prog = document.getElementById("yourcode").value;
-      var mypre = document.getElementById("output");
-      mypre.innerHTML = "";
-      Sk.pre = "output";
-      Sk.configure({ output: this.outf, read: this.builtinRead });
-      (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = "mycanvas";
-      var myPromise = Sk.misceval.asyncToPromise(function() {
-        return Sk.importMainWithBody("<stdin>", false, prog, true);
-      });
-      myPromise.then(
-        function(mod) {
-          console.log("success");
-        },
-        function(err) {
-          console.log(err.toString());
-        }
+      console.log(
+        "%c ************************* OUTPUT *************************",
+        "background: #303960; color: #f8b24f"
       );
-      localStorage.setItem('sourcePython', this.source);
+      pyodide.runPython(this.source);
     }
   }
 };
